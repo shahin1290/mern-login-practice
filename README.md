@@ -42,3 +42,39 @@ Add in the server.js by requring the file
 ```javascript 
 connectDB() 
 ```
+
+## Sets up routes with express Router
+routes-api-users.js
+
+```Javascript
+const express = require('express')
+const router = express.Router()
+
+router.get('/', (req, res) => {
+  res.send('Get Users')
+})
+
+module.exports = router
+```
+
+routes-api-auth.js
+```Javascript
+const express = require('express')
+const router = express.Router()
+
+router.post('/register', (req, res) => {
+  res.send('Register User')
+})
+
+router.post('/login', (req, res) => {
+  res.send('Login User  ')
+})
+
+module.exports = router
+```
+server.js
+```javascript
+app.use('/api/users', require('./routes/api/users'))
+app.use('/api/auth', require('./routes/api/auth'))
+```
+
