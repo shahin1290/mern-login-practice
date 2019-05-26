@@ -192,3 +192,46 @@ router.post('/login', [
   }
 })
 ```
+
+## Get user data by adding custom auth middleware to verify jwt token
+middleware-auth.js
+```javascript
+const config = require('config')
+const jwt = require('jsonwebtoken')
+
+module.exports = (req, res, next) => {
+  const token = req.header('x-auth-token')
+
+  if(!token){
+    return res.status(401).json({ msg: 'No token, authentication denied'})
+  }
+
+  try { 
+    const decoded = jwt.verify(token, config.get('jwtSecret'))
+
+    req.user = decoded.user
+    next()
+  } catch (err) {
+    res.status(401).json({ msg: 'Token is not valid'})
+  }
+}
+```
+users.js
+```javascript
+const express = require('express')
+const router = express.Router()
+const User = require('../../models/User')
+const auth = require('../../middleware/auth')
+
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password')
+    res.send(user)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Server error')
+  }
+})
+
+module.exports = router
+```
