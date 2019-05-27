@@ -235,3 +235,13 @@ router.get('/', auth, async (req, res) => {
 
 module.exports = router
 ```
+
+## React Redux set up
+```
+npx create-react-app client
+npm i axios react-router-dom redux react-redux redux-thunk
+```
+package.json
+```
+"proxy": "http://localhost:5000"
+```
